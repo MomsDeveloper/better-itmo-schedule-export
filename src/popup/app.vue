@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getSchedule } from './parseSchedule'
+</script>
 
 <template>
-  <div class="wrapper">
+  <div class="form">
     <h2>Period:</h2>
     <div class="period-buttons">
       <!-- <button class="period-button">week</button>
@@ -40,18 +42,29 @@
     </div>
     <div class="date-inputs">
       <h2>From:</h2>
-      <input type="date" class="date-input" />
+      <input
+        type="date"
+        class="date-input"
+      />
       <h2>To:</h2>
-      <input type="date" class="date-input" />
+      <input
+        type="date"
+        class="date-input"
+      />
     </div>
     <div>
-      <button class="export-button">Export</button>
+      <button
+        class="export-button"
+        @click="getSchedule"
+      >
+        Export
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.wrapper {
+.form {
   display: flex;
   flex-direction: column;
   gap: 10px;

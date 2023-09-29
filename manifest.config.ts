@@ -35,7 +35,7 @@ export default defineManifest(async (env) => ({
   ],
   host_permissions: ['*://*/*'],
   options_page: 'src/options/index.html',
-  permissions: ['storage', 'activeTab', 'identity'],
+  permissions: ['cookies', 'activeTab', 'storage'],
   web_accessible_resources: [
     {
       matches: ['*://*/*'],
@@ -46,4 +46,5 @@ export default defineManifest(async (env) => ({
       resources: ['src/content-script/iframe/index.html'],
     },
   ],
+
 }))
