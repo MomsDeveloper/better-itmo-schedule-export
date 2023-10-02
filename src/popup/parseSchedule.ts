@@ -1,7 +1,8 @@
-export async function getAuthToken() {
+// get user token from cookies
+async function getAuthToken(): Promise<string> {
     return await new Promise((resolve, reject) => {
         chrome.cookies.get(
-            {url: 'https://my.itmo.ru', name: 'auth._id_token.itmoId'},
+            { url: 'https://my.itmo.ru', name: 'auth._id_token.itmoId' },
             function (cookie) {
                 if (cookie) {
                     resolve(cookie.value);
@@ -14,7 +15,45 @@ export async function getAuthToken() {
 }
 
 
-export async function getSchedule() {
+export async function getSchedule(dateFrom: Date, dateTo: Date): Promise<any> {
     const authToken = await getAuthToken();
-    console.log(authToken);
+    const days = await fetchSchedule(authToken, dateFrom, dateTo);
+}
+
+
+interface Lesson {
+    subject: string;
+    time_start: string;
+    time_end: string;
+    type: string;
+    teacher_name: string;
+    format: string;
+    building: string;
+}
+
+
+interface Day {
+    day_number: number;
+    lessons: Lesson[];
+}
+
+
+async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: Date): Promise<Day[]> {
+    const apiUrl = 'https://my.itmo.ru/api/schedule/schedule/personal';
+
+    const params = new URLSearchParams({
+        date_start: new Date().toISOString().slice(0, 10),
+        date_end: new Date().toISOString().slice(0, 10),
+    });
+
+    const urlWithParams = `${apiUrl}?${params.toString()}`;
+
+    const response = await fetch(urlWithParams, {
+        headers: {
+            'Authorization': `Bearer ${authToken}`
+        },
+    });
+
+    const json = await response.json();
+    return json['data'];
 }
