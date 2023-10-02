@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { getSchedule } from './parseSchedule'
+
+const dateFrom = ref(new Date().toISOString().slice(0, 10));
+const dateTo = ref(new Date().toISOString().slice(0, 10));
+
+async function _getSchedule() {
+  const schedule = await getSchedule(new Date(dateFrom.value), new Date(dateTo.value));
+  // console.log(schedule);
+}
+
 </script>
 
 <template>
@@ -43,11 +52,13 @@ import { getSchedule } from './parseSchedule'
     <div class="date-inputs">
       <h2>From:</h2>
       <input
+        v-model="dateFrom"
         type="date"
         class="date-input"
       />
       <h2>To:</h2>
       <input
+        v-model="dateTo"
         type="date"
         class="date-input"
       />
@@ -55,7 +66,7 @@ import { getSchedule } from './parseSchedule'
     <div>
       <button
         class="export-button"
-        @click="getSchedule"
+        @click="_getSchedule"
       >
         Export
       </button>
