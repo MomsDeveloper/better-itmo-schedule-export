@@ -42,8 +42,8 @@ async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: Date): P
     const apiUrl = 'https://my.itmo.ru/api/schedule/schedule/personal';
 
     const params = new URLSearchParams({
-        date_start: new Date().toISOString().slice(0, 10),
-        date_end: new Date().toISOString().slice(0, 10),
+        date_start: dateFrom.toISOString().slice(0, 10),
+        date_end: dateTo.toISOString().slice(0, 10),
     });
 
     const urlWithParams = `${apiUrl}?${params.toString()}`;
