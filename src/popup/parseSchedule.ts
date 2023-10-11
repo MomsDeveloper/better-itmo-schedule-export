@@ -27,12 +27,12 @@ interface Lesson {
 
 
 interface Day {
-    day_number: number;
+    date: string;
     lessons: Lesson[];
 }
 
 
-async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: Date): Promise<Day[]> {
+export async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: Date): Promise<Day[]> {
     const apiUrl = 'https://my.itmo.ru/api/schedule/schedule/personal';
 
     const params = new URLSearchParams({
@@ -42,10 +42,13 @@ async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: Date): P
 
     const urlWithParams = `${apiUrl}?${params.toString()}`;
 
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set('Authorization', `Bearer ${authToken}`);
+    requestHeaders.set('Accept-Language', 'ru');
+
     const response = await fetch(urlWithParams, {
-        headers: {
-            'Authorization': `Bearer ${authToken}`
-        },
+        headers: requestHeaders
     });
 
     const json = await response.json();
