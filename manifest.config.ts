@@ -26,6 +26,5 @@ export default defineManifest(async (env) => ({
     service_worker: 'src/background/index.ts',
   },
   host_permissions: ['*://*/*'],
-  options_page: 'src/options/index.html',
   permissions: ['cookies', 'activeTab', 'storage', 'downloads'],
 }))
