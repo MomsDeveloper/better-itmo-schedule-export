@@ -35,7 +35,7 @@ export default defineManifest(async (env) => ({
   ],
   host_permissions: ['*://*/*'],
   options_page: 'src/options/index.html',
-  permissions: ['cookies', 'activeTab', 'storage'],
+  permissions: ['cookies', 'activeTab', 'storage', 'downloads'],
   web_accessible_resources: [
     {
       matches: ['*://*/*'],

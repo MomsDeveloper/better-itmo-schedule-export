@@ -1,10 +1,35 @@
 <script setup lang="ts">
 const inputsDisabled = ref(true)
 
+import { getAuthToken } from './parseSchedule'
+import { fetchSchedule } from './parseSchedule'
+import { scheduleToIcs} from './parseSchedule'
+
 const dateFrom = ref(new Date().toISOString().slice(0, 10))
 const dateTo = ref(new Date().toISOString().slice(0, 10))
 setDateOffset(7)
 
+async function getSchedule(): Promise<any> {
+  const authToken = await getAuthToken()
+  const days = await fetchSchedule(
+    authToken,
+    new Date(dateFrom.value),
+    new Date(dateTo.value)
+  )
+  const ics = scheduleToIcs(days)
+  saveToIcs(ics)
+  
+}
+
+function saveToIcs(schedule:string) {
+  const blob = new Blob([schedule], { type: 'text/calendar' })
+  const url = URL.createObjectURL(blob)
+  chrome.downloads.download({
+    url: url,
+    filename: 'schedule.ics',
+    saveAs: true,
+  })
+}
 
 function setDateOffset(days: number) {
   dateFrom.value = new Date().toISOString().slice(0, 10)
@@ -77,6 +102,7 @@ function setDateOffset(days: number) {
     <div>
       <button
         class="export-button"
+        @click="getSchedule"
       >
         Export
       </button>
