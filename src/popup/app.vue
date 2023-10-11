@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { getSchedule } from './parseSchedule'
+const inputsDisabled = ref(true)
 
-const dateFrom = ref(new Date().toISOString().slice(0, 10));
-const dateTo = ref(new Date().toISOString().slice(0, 10));
+const dateFrom = ref(new Date().toISOString().slice(0, 10))
+const dateTo = ref(new Date().toISOString().slice(0, 10))
+setDateOffset(7)
 
-async function _getSchedule() {
-  const schedule = await getSchedule(new Date(dateFrom.value), new Date(dateTo.value));
-  // console.log(schedule);
+
+function setDateOffset(days: number) {
+  dateFrom.value = new Date().toISOString().slice(0, 10)
+
+  const week = new Date()
+  week.setDate(week.getDate() + days)
+  dateTo.value = week.toISOString().slice(0, 10)
+
+  inputsDisabled.value = true
+
 }
 
 </script>
@@ -15,15 +23,13 @@ async function _getSchedule() {
   <div class="form">
     <h2>Period:</h2>
     <div class="period-buttons">
-      <!-- <button class="period-button">week</button>
-      <button class="period-button">2 weeks</button>
-      <button class="period-button">month</button> -->
       <input
         type="radio"
         id="week"
         name="period-group"
         class="period-button"
         checked
+        @click="setDateOffset(7)"
       />
       <label for="week">week</label>
 
@@ -32,6 +38,7 @@ async function _getSchedule() {
         id="2weeks"
         name="period-group"
         class="period-button"
+        @click="setDateOffset(14)"
       />
       <label for="2weeks">2 weeks</label>
       <input
@@ -39,6 +46,7 @@ async function _getSchedule() {
         id="month"
         name="period-group"
         class="period-button"
+        @click="setDateOffset(30)"
       />
       <label for="month">month</label>
       <input
@@ -46,6 +54,7 @@ async function _getSchedule() {
         id="manual"
         name="period-group"
         class="period-button"
+        @click="inputsDisabled = false"
       />
       <label for="manual">manual</label>
     </div>
@@ -55,18 +64,19 @@ async function _getSchedule() {
         v-model="dateFrom"
         type="date"
         class="date-input"
+        :disabled="inputsDisabled"
       />
       <h2>To:</h2>
       <input
         v-model="dateTo"
         type="date"
         class="date-input"
+        :disabled="inputsDisabled"
       />
     </div>
     <div>
       <button
         class="export-button"
-        @click="_getSchedule"
       >
         Export
       </button>

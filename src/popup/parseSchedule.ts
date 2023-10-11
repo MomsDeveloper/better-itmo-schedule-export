@@ -1,5 +1,5 @@
 // get user token from cookies
-async function getAuthToken(): Promise<string> {
+export async function getAuthToken(): Promise<string> {
     return await new Promise((resolve, reject) => {
         chrome.cookies.get(
             { url: 'https://my.itmo.ru', name: 'auth._id_token.itmoId' },
@@ -12,12 +12,6 @@ async function getAuthToken(): Promise<string> {
             }
         );
     });
-}
-
-
-export async function getSchedule(dateFrom: Date, dateTo: Date): Promise<any> {
-    const authToken = await getAuthToken();
-    const days = await fetchSchedule(authToken, dateFrom, dateTo);
 }
 
 
