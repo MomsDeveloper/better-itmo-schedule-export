@@ -27,21 +27,9 @@ export default defineConfig({
     Pages({
       dirs: [
         {
-          dir: 'src/pages',
-          baseRoute: '',
-        },
-        {
-          dir: 'src/options/pages',
-          baseRoute: 'options',
-        },
-        {
           dir: 'src/popup/pages',
           baseRoute: 'popup',
-        },
-        {
-          dir: 'src/content-script/iframe/pages',
-          baseRoute: 'iframe',
-        },
+        }
       ],
     }),
 
@@ -85,13 +73,6 @@ export default defineConfig({
       },
     },
   ],
-  build: {
-    rollupOptions: {
-      input: {
-        iframe: 'src/content-script/iframe/index.html',
-      },
-    },
-  },
   server: {
     port: 8888,
     strictPort: true,

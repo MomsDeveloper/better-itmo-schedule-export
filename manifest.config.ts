@@ -25,26 +25,7 @@ export default defineManifest(async (env) => ({
   background: {
     service_worker: 'src/background/index.ts',
   },
-  content_scripts: [
-    {
-      all_frames: false,
-      js: ['src/content-script/index.ts'],
-      matches: ['*://*/*'],
-      run_at: 'document_end',
-    },
-  ],
   host_permissions: ['*://*/*'],
   options_page: 'src/options/index.html',
   permissions: ['cookies', 'activeTab', 'storage', 'downloads'],
-  web_accessible_resources: [
-    {
-      matches: ['*://*/*'],
-      resources: ['src/content-script/index.ts'],
-    },
-    {
-      matches: ['*://*/*'],
-      resources: ['src/content-script/iframe/index.html'],
-    },
-  ],
-
 }))
