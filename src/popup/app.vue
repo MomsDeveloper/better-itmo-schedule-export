@@ -9,7 +9,7 @@ const dateFrom = ref(new Date().toISOString().slice(0, 10))
 const dateTo = ref(new Date().toISOString().slice(0, 10))
 setDateOffset(7)
 
-async function getSchedule(): Promise<any> {
+async function getSchedule(): Promise<void> {
   const authToken = await getAuthToken()
   const days = await fetchSchedule(
     authToken,
@@ -18,7 +18,7 @@ async function getSchedule(): Promise<any> {
   )
   const ics = scheduleToIcs(days)
   saveToIcs(ics)
-  
+
 }
 
 function saveToIcs(schedule:string) {
@@ -49,8 +49,8 @@ function setDateOffset(days: number) {
     <h2>Period:</h2>
     <div class="period-buttons">
       <input
-        type="radio"
         id="week"
+        type="radio"
         name="period-group"
         class="period-button"
         checked
@@ -59,24 +59,24 @@ function setDateOffset(days: number) {
       <label for="week">week</label>
 
       <input
-        type="radio"
         id="2weeks"
+        type="radio"
         name="period-group"
         class="period-button"
         @click="setDateOffset(14)"
       />
       <label for="2weeks">2 weeks</label>
       <input
-        type="radio"
         id="month"
+        type="radio"
         name="period-group"
         class="period-button"
         @click="setDateOffset(30)"
       />
       <label for="month">month</label>
       <input
-        type="radio"
         id="manual"
+        type="radio"
         name="period-group"
         class="period-button"
         @click="inputsDisabled = false"
