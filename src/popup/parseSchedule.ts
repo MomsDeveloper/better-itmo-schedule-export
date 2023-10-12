@@ -69,7 +69,8 @@ export function scheduleToIcs(schedule: Day[]): string {
     result += "REFRESH-INTERVAL;VALUE=DURATION:PT10M\n";
     for (const day of schedule) {
         for (const lesson of day.lessons) {
-            const [time_start, time_end] = joinDateTime(day, lesson);
+            const time_start = joinIcsDateTime(day.date, lesson.time_start);
+            const time_end = joinIcsDateTime(day.date, lesson.time_end);
             result += "BEGIN:VEVENT\n";
             result += `SUMMARY:${lesson.subject}\n`;
             result += `DTSTART;VALUE=DATE-TIME:${time_start}\n`;
@@ -83,19 +84,12 @@ export function scheduleToIcs(schedule: Day[]): string {
     return result;
 }
 
-function joinDateTime(day: Day, lesson: Lesson): [string, string] {
-    const date_start = new Date(day.date);
-    const time_parts = lesson.time_start.split(':');
-    date_start.setHours(parseInt(time_parts[0]));
-    date_start.setMinutes(parseInt(time_parts[1]));
-    date_start.setSeconds(0);
 
+function joinIcsDateTime(dateString: string, timeString: string): string {
+    const [year, month, day] = dateString.split('-');
+    const [hours, minutes] = timeString.split(':');
 
-    const date_end = new Date(day.date);
-    const time_parts_end = lesson.time_end.split(':');
-    date_end.setHours(parseInt(time_parts_end[0]));
-    date_end.setMinutes(parseInt(time_parts_end[1]));
-    date_end.setSeconds(0);
-
-    return [date_start.toISOString(), date_end.toISOString()];
+    const datePart = `${year}${month}${day}`;
+    const timePart = `${hours}${minutes}00`;
+    return `${datePart}T${timePart}Z`
 }
