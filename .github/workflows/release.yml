@@ -50,4 +50,4 @@ jobs:
           tag_name: ${{ steps.get-version.outputs.version }}
           release_name: ${{ steps.get-version.outputs.version }}
           draft: true
-          files: ${{ steps.get-version.outputs.version }}.zip
+          files: extension.zip
