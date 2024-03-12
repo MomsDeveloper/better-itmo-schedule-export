@@ -56,8 +56,7 @@ export async function fetchSchedule(authToken: string, dateFrom: Date, dateTo: D
 }
 
 
-export function scheduleToIcs(schedule: Day[]): string {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+export function scheduleToIcs(schedule: Day[], timeZone: string): string {
 
     let result: string = "";
 
@@ -65,14 +64,11 @@ export function scheduleToIcs(schedule: Day[]): string {
     result += "VERSION:2.0\n";
     result += "PRODID:-//Apple Computer\\, Inc//iCal 1.5//EN\n";
     result += "CALSCALE:GREGORIAN\n";
-    result += "X-WR-CALNAME:my.itmo\n";
-    result += `X-WR-TIMEZONE:${timeZone}\n`;
-    result += "X-PUBLISHED-TTL:PT10M\n";
     result += "REFRESH-INTERVAL;VALUE=DURATION:PT10M\n";
     for (const day of schedule) {
         for (const lesson of day.lessons) {
-            const time_start = joinIcsDateTime(day.date, lesson.time_start);
-            const time_end = joinIcsDateTime(day.date, lesson.time_end);
+            const time_start = castToUTC(day.date, lesson.time_start, timeZone);
+            const time_end = castToUTC(day.date, lesson.time_end, timeZone);
             result += "BEGIN:VEVENT\n";
             result += `SUMMARY:${lesson.subject}\n`;
             result += `DTSTART;VALUE=DATE-TIME:${time_start}\n`;
@@ -86,12 +82,8 @@ export function scheduleToIcs(schedule: Day[]): string {
     return result;
 }
 
-
-function joinIcsDateTime(dateString: string, timeString: string): string {
-    const [year, month, day] = dateString.split('-');
-    const [hours, minutes] = timeString.split(':');
-
-    const datePart = `${year}${month}${day}`;
-    const timePart = `${hours}${minutes}00`;
-    return `${datePart}T${timePart}Z`
+function castToUTC(date: string, time: string, timezone: string): string {
+    const d = new Date(`${date}T${time}`);
+    const utc = d.toLocaleString('en-US', { timeZone: timezone });
+    return new Date(utc).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 }
