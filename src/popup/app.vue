@@ -16,7 +16,8 @@ async function getSchedule(): Promise<void> {
     new Date(dateFrom.value),
     new Date(dateTo.value)
   )
-  const ics = scheduleToIcs(days)
+  // Use Moscow timezone for ITMO schedule
+  const ics = scheduleToIcs(days, 'Europe/Moscow')
   saveToIcs(ics)
 
 }
