@@ -128,37 +128,37 @@ export function scheduleToIcs(schedule: Day[], timeZone: string): string {
             
             // Teacher information
             if (lesson.teacher_name) {
-                description += `Преподаватель: ${lesson.teacher_name}\\n`;
+                description += `Преподаватель: ${lesson.teacher_name}\n`;
             }
             
             // Group information
             if (lesson.group) {
-                description += `Группа: ${lesson.group}\\n`;
+                description += `Группа: ${lesson.group}\n`;
             }
             
             // Format information
             if (lesson.format) {
-                description += `Формат: ${lesson.format}\\n`;
+                description += `Формат: ${lesson.format}\n`;
             }
             
             // Work type if different from type
             if (lesson.work_type && lesson.work_type !== lesson.type) {
-                description += `Тип занятия: ${lesson.work_type}\\n`;
+                description += `Тип занятия: ${lesson.work_type}\n`;
             }
             
             // Note if present
             if (lesson.note) {
-                description += `\\nПримечание: ${lesson.note}\\n`;
+                description += `\nПримечание: ${lesson.note}\n`;
             }
             
             // Zoom link if present
             if (lesson.zoom_url) {
-                description += `\\nZoom: ${lesson.zoom_url}\\n`;
+                description += `\nZoom: ${lesson.zoom_url}\n`;
                 if (lesson.zoom_password) {
-                    description += `Пароль: ${lesson.zoom_password}\\n`;
+                    description += `Пароль: ${lesson.zoom_password}\n`;
                 }
                 if (lesson.zoom_info) {
-                    description += `${lesson.zoom_info}\\n`;
+                    description += `${lesson.zoom_info}\n`;
                 }
             }
             
@@ -206,11 +206,12 @@ function escapeIcsText(text: string): string {
     if (!text) return "";
     // Escape special characters according to ICS specification
     return text
-        .replace(/\\/g, "\\\\")  // Escape backslashes first
+        .replace(/\r\n/g, "\n")   // Normalize line endings
+        .replace(/\r/g, "\n")     // Normalize line endings
+        .replace(/\\/g, "\\\\")   // Escape backslashes
         .replace(/;/g, "\\;")     // Escape semicolons
         .replace(/,/g, "\\,")     // Escape commas
-        .replace(/\n/g, "\\n")    // Escape newlines
-        .replace(/\r/g, "");      // Remove carriage returns
+        .replace(/\n/g, "\\n");   // Convert newlines to literal \n
 }
 
 function castToUTC(date: string, time: string, timezone: string): string {
